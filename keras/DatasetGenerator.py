@@ -112,7 +112,7 @@ class DatasetGenerator (ImageDataGenerator):
                 #---- do the normalization procedure
                 if type(imageData) != np.ndarray:
                     trnorm = ImageTransform(ImageTransform.TRANSFORM_NORMALIZE)
-                    trnorm.transform(ImageTransform.TRANSFORM_NORMALIZE, imageData)
+                    imageData = trnorm.transform(ImageTransform.TRANSFORM_NORMALIZE, imageData)
 
                 #---- Add new image to batch
                 X[batchID, :, :, :] = imageData
