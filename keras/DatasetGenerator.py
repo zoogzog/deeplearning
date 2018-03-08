@@ -134,7 +134,7 @@ class DatasetGenerator (ImageDataGenerator):
             #---- We don't wana repeat the batches
             for i in range(batchCount):
 
-                X, Y = self.generateBatch(indexList[i * self.dbBatchSize:(i+1)*self.dbBatchSize])
+                X, Y = self.generateBatch(indexList[i * self.batchsize:(i+1)*self.batchsize])
 
                 yield  X,Y
 
