@@ -19,7 +19,7 @@ from DenseNetSettings import DenseNetSettings
 
 #---- Path to a directory where images are located
 #---- For this example the Keras ImageDataGenerator will be used for loading images
-rootDirectory = 'D:/ANDREY/Development/deeplearning/database'
+rootDirectory = '../database'
 
 #---- Parameters for training the neural network
 imgWidth = 224

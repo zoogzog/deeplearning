@@ -6,7 +6,7 @@ import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 from PIL import Image
 
-import ImageTransform
+from ImageTransform import ImageTransform
 
 #--------------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ class DatasetGenerator (ImageDataGenerator):
                 #---- do the normalization procedure
                 if type(imageData) != np.ndarray:
                     trnorm = ImageTransform(ImageTransform.TRANSFORM_NORMALIZE)
-                    imageData = trnorm.transform(ImageTransform.TRANSFORM_NORMALIZE, imageData)
+                    imageData = trnorm.transform(imageData)
 
                 #---- Add new image to batch
                 X[batchID, :, :, :] = imageData

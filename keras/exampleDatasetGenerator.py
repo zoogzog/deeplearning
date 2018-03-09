@@ -15,11 +15,11 @@ from DatasetGenerator import DatasetGenerator
 
 #---- Path to a directory where images are located
 #---- Internal structure of the directory is not important
-pathDatabase = 'D:/ANDREY/Development/deeplearning/database/'
+pathDatabase = '../database/'
 
 #---- Path to the dataset. For each image this file contains its
 #---- path and target vector
-pathFile = 'D:/ANDREY/Development/deeplearning/database/dataset1.txt'
+pathFile = '../database/dataset1.txt'
 
 imgWidth = 224
 imgHeight = 224
