@@ -44,7 +44,7 @@ class CallbackLogger(Callback):
         timestampDate = time.strftime("%d%m%Y")
 
         #---- Save time and date when training has been started
-        loggerFilePath = EnvironmentSettings.DEFAULT_LOG_EXECUTION + 'log-' + self.logName + '.txt'
+        loggerFilePath = 'log-' + self.logName + '.txt'
         self.logger = open(loggerFilePath, 'a')
         self.logger.write('Training started at ' + timestampDate + '-' + timestampTime + '\n')
         self.logger.flush()
