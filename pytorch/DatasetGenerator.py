@@ -6,22 +6,10 @@ import torch
 from torch.utils.data import Dataset
 
 #-------------------------------------------------------------------------------- 
-#---- This class parsers a dataset file, which has the following format
-#---- <$image-file-path $target-vector>
-#---- * $image-file-path: is the path to an image in a database
-#---- This path can be absolute or relative. If relative path is used, then
-#---- the root directory path to image database has to be specified in the constructor.
-#---- * $target-vector: is a vector of integers, separated with spaces
-#---- No checks done to insure the correct data format of the input file
-#-------------------------------------------------------------------------------- 
 
 class DatasetGenerator (Dataset):
     
     #-------------------------------------------------------------------------------- 
-    #---- Initialize the dataset generator
-    #---- In: pathImageDirectory - path to the database with images
-    #---- In: pathDatasetFile - path to the dataset file
-    #---- In: transfrom - sequence of image transformations
     
     def __init__ (self, pathImageDirectory, pathDatasetFile, transform):
     
@@ -55,8 +43,6 @@ class DatasetGenerator (Dataset):
         fileDescriptor.close()
     
     #-------------------------------------------------------------------------------- 
-    #---- Returns an image and its label specified by the index
-    #---- In: index - index of the dataset element
     
     def __getitem__(self, index):
         
@@ -70,11 +56,51 @@ class DatasetGenerator (Dataset):
         return imageData, imageLabel
         
     #-------------------------------------------------------------------------------- 
-    #---- Returns length of the dataset
     
     def __len__(self):
         
         return len(self.listImagePaths)
-    
+
+    #--------------------------------------------------------------------------------
+    #---- Get the number of samples in the database
+
+    def getSize (self):
+
+        return len(self.listImagePaths)
+
+    #--------------------------------------------------------------------------------
+    #---- Get the number of samples, which have non zero element
+    #---- in the label, specified by the position
+
+    def getCountNonZero (self, index):
+
+        count = 0
+
+        for i in range (0, len(self.listImageLabels)):
+
+            label = self.listImageLabels[i]
+
+            if (index > len(label)): return 0
+
+            if (label[index] != 0): count += 1
+
+        return count
+
+    #--------------------------------------------------------------------------------
+    #----- Get the distribution of positive and negative samples per each index
+
+    def getClassDistribution (self):
+
+        dimension = len(self.listImageLabels[0])
+
+        distribution = []
+
+        length = self.getSize()
+
+        for i in range(0, dimension):
+            distribution.append(self.getCountNonZero(i) / length)
+
+        return distribution
+
  #-------------------------------------------------------------------------------- 
     
