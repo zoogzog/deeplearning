@@ -18,4 +18,23 @@ Examples
 - exampleDatasetGenerator - shows how to use the DatasetGenerator and ImageTransform
 - exampleDenseNet - shows how to define a densenet with the DenseNet class
 - exampleNetworkCoach - shows how to use the NetworkCoach class 
+
+__PyTorch__
+
+The following classes allow to conduct the whole cycle of training, validation and testing
+of neural networks for solving image classification problem. Different networks, datasets,
+databases could be tested by speciying parameters of the task.
+
+The main script is *LauncherMain.py*, which launches sub-script *LauncherTask.py* for each individual 
+task. Output includes: training log, trained model, accuracy on test (AUROC, TP, FP, F-Score)
+
+List of classes
+- AccuracyCalculator - class for computing various statistics for evaluating trained network accuracy
+- DatasetGenerator - dataset loader, which handles processing of dataset files (see ../database/dataset1.txt)
+- LauncherMain - main class for launching execution of all tasks
+- LauncherTask - class that launches training for each individual task
+- LossZoo - different types of losses
+- NetworkCoach - class for training and testing
+- NetworkZoo - various models (from torchvision, that allows higher level of customization)
+- TaskManager - class that controls states: training, validation, testing, and outputs logs, results
  
