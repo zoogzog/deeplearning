@@ -239,11 +239,11 @@ class TaskManager ():
         NetworkCoach.netTrain(dataLoaderTrain, dataLoaderVal, model, nnEpochs, loss, optimizer, scheduler, pathOutputModel, pathOutputLog)
 
         #---- Get the best model
-        modelCheckpoint = torch.load(pathOutputModel)
-        model.load_state_dict(modelCheckpoint['state_dict'])
+        #modelCheckpoint = torch.load(pathOutputModel)
+        #model.load_state_dict(modelCheckpoint['state_dict'])
 
         #---- Launch testing
-        NetworkCoach.netTest(dataLoaderTest, model, nnNumClasses, pathOutputAcc, pathOutputPred)
+        #NetworkCoach.netTest(dataLoaderTest, model, nnNumClasses, pathOutputAcc, pathOutputPred)
 
     # --------------------------------------------------------------------------------
 

@@ -20,7 +20,7 @@ class NetworkCoach:
     #---- In: nnEpochs - number of epochs to train the network
     #---- In: nnLoss - a loss function for training the network
     #---- In: nnOptimizer - optimization method
-    #---- In: scheduler - learning rate changed sheduler
+    #---- In: scheduler - learning rate scheduler
     #---- In: pathOutputModel - the best model will be saved here
     #---- In: pathOutputLog - the log of training (loss, time) will be saved here
 
@@ -33,9 +33,13 @@ class NetworkCoach:
         for epochID in range(0, nnEpochs):
 
             NetworkCoach.epochTrain(nnModel, datasetLoaderTrain, nnOptimizer, nnLoss)
-            lossVal, losstensor = NetworkCoach.epochVal(nnModel, datasetLoaderValidate, nnOptimizer, nnLoss)
 
-            scheduler.step(losstensor.data[0])
+            #---- Don't save gardients - save memory            
+            with torch.no_grad():
+                lossVal, losstensor = NetworkCoach.epochVal(nnModel, datasetLoaderValidate, nnOptimizer, nnLoss)
+
+            #---- For the pytorch version 0.4.0 direct conversion from 0-dim tensor to float is allowed
+            scheduler.step(losstensor)
 
             timestampTime = time.strftime("%H%M%S")
             timestampDate = time.strftime("%d%m%Y")
@@ -44,10 +48,10 @@ class NetworkCoach:
             if lossVal < lossMIN:
                 lossMIN = lossVal
                 torch.save({'epoch': epochID + 1, 'state_dict': nnModel.state_dict(), 'best_loss': lossMIN, 'optimizer': nnOptimizer.state_dict()}, pathOutputModel)
-                ostreamLog.write("EPOCH [" + str(epochID) + "]: " + timestampEpochEnd + " loss: " + str(lossVal) + " {SAVED} \n")
+                ostreamLog.write("EPOCH [" + str(epochID) + "]: " + timestampEpochEnd + " loss: " + str(lossVal.item()) + " {SAVED} \n")
                 ostreamLog.flush()
             else:
-                ostreamLog.write("EPOCH [" + str(epochID) + "]: " + timestampEpochEnd + " loss: " + str(lossVal) + " {-SKP-} \n")
+                ostreamLog.write("EPOCH [" + str(epochID) + "]: " + timestampEpochEnd + " loss: " + str(lossVal.item()) + " {-SKP-} \n")
                 ostreamLog.flush()
 
         ostreamLog.close()
@@ -74,7 +78,7 @@ class NetworkCoach:
 
             bs, n_crops, c, h, w = input.size()
 
-            varInput = torch.autograd.Variable(input.view(-1, c, h, w).cuda(), volatile=True)
+            varInput = torch.autograd.Variable(input.view(-1, c, h, w).cuda())
 
             out = nnModel(varInput)
             outMean = out.view(bs, n_crops, -1).mean(1)
@@ -102,11 +106,9 @@ class NetworkCoach:
         for batchID, (input, target) in enumerate(dataLoader):
             target = target.cuda(async=True)
 
-            varInput = torch.autograd.Variable(input)
-            varTarget = torch.autograd.Variable(target)
-            varOutput = model(varInput)
+            output = model(input)
 
-            lossvalue = loss(varOutput, varTarget)
+            lossvalue = loss(output, target)
 
             #---- Back-propagation
             optimizer.zero_grad()
@@ -127,14 +129,13 @@ class NetworkCoach:
         for i, (input, target) in enumerate(dataLoader):
             target = target.cuda(async=True)
 
-            varInput = torch.autograd.Variable(input, volatile=True)
-            varTarget = torch.autograd.Variable(target, volatile=True)
-            varOutput = model(varInput)
+            output = model(input)
 
-            losstensor = loss(varOutput, varTarget)
+            losstensor = loss(output, target)
             losstensorMean += losstensor
 
-            lossVal += losstensor.data[0]
+            #---- For the pytorch version 0.4.0 direct conversion from 0-dim tensor to float is allowed
+            lossVal += losstensor
             lossValNorm += 1
 
         outLoss = lossVal / lossValNorm
