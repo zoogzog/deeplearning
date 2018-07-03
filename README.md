@@ -20,6 +20,7 @@ Examples
 - exampleNetworkCoach - shows how to use the NetworkCoach class 
 
 __PyTorch__
+
 Tested on: pytorch 0.4.0, torchvision 0.2.1, CUDA 9.0
 
 The following classes allow to conduct the whole cycle of training, validation and testing
