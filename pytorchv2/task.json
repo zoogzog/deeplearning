@@ -1,0 +1,39 @@
+{
+  "tasklist":
+  [
+    {
+      "tasktype": 0,
+
+      "database": "D:/ANDREY/DevXray/database/db-handai-img/",
+      "dataset_train": "D:/ANDREY/DevXray/datasets/handai-x/handai-Y4-1617-train.txt",
+      "dataset_validate": "D:/ANDREY/DevXray/datasets/handai-x/handai-Y4-1617-val.txt",
+      "dataset_test": "D:/ANDREY/DevXray/datasets/handai-x/handai-Y4-1617-test.txt",
+
+      "datagen": "classbase",
+
+      "output_log": "D:/ANDREY/DevXray/model-dn-log/handai-log/",
+      "output_model": "D:/ANDREY/DevXray/model-dn-tar/handai-model/",
+      "output_accuracy": "D:/ANDREY/DevXray/output/handai-output/",
+
+      "network": "densenet121big",
+      "network_istrained": true,
+      "network_classcount": 39,
+      "activation": "sigmoid",
+
+      "trnsfrm_train": ["rndcrop", "resize"],
+      "trnsfrm_train_param": [512, 500],
+
+      "trnsfrm_validate": ["resize", "ccrop"],
+      "trnsfrm_validate_param": [512, 500],
+
+      "trnsfrm_test": ["resize", "ccrop"],
+      "trnsfrm_test_param": [512, 500],
+
+      "loss": "bce",
+
+      "epoch": 50,
+      "lrate": 0.001,
+      "batch": 4
+    }
+  ]
+}
